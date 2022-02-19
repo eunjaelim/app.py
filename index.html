@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <head>
+        <!-- Webpage Title -->
+        <title>English | 영어단어</title>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+        <script type="text/javascript">
+
+
+
+          $(document).ready(function () {
+                showReview();
+            });
+
+      function makeReview() {
+                let title = $('#title').val()
+                let review = $('#bookReview').val()
+
+                $.ajax({
+                    type: "POST",
+                    url: "/review",
+                    data: {title_give:title,review_give:review},
+                    success: function (response) {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                });
+            }
+
+
+
+
+            function showReview() {
+                $.ajax({
+                    type: "GET",
+                    url: "/review",
+                    data: {},
+                    success: function (response) {
+                        let reviews = response['all_reviews']
+                        for (let i = 0; i < reviews.length; i++) {
+                            let title = reviews[i]['title']
+                            let review = reviews[i]['review']
+
+                            let temp_html = `<div class="card" id="card-remove" style="width: 18rem;">
+            <div class="card-body" >
+                <h5 class="card-title">${title}</h5>
+                <br>
+                <p class="card-text" style="background-color: #e9ecef">${review}</p>
+                <button class="btn btn-outline-success my-2 my-sm-0 star-btn" onabort="handleClick()" type="submit">
+                    ☆
+                </button>
+                <button class="btn btn-outline-success my-2 my-sm-0 delete-btn"
+                        onclick="fnCalCount('${title}')" type="submit">삭제
+                </button>
+            </div>
+        </div> `
+                            $('#reviews-box').append(temp_html)
+                        }
+                    }
+                });
+            }
+
+function fnCalCount(title) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/delete',
+                    data: {title_give:title},
+                    success: function (response) {
+                        alert(response['msg']);
+                        window.location.reload()
+                    }
+                });
+            }
+
+
+
+        </script>
+    <!-- style -->
+    <style type="text/css">
+        @import url('ly=Noto+Sans+KR:wght@400;500;700&family=Roboto:wght@500&display=swap');
+
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .wrap {
+            width: 900px;
+            margin: auto;
+        }
+
+
+
+
+        h1 {
+            text-align: center;
+            padding-bottom: 50px;
+        }
+
+        .navbar {
+
+            padding-bottom: 10px;
+            width:500px;
+            margin: 20px auto;
+            padding: 50px;
+        }
+
+
+
+        .lead {
+            padding-top: 16px;
+            padding-left: 10 0 0 0px;
+            margin-right: 30px;
+        }
+
+        #post-box {
+            width: 800px;
+            margin: 20px auto;
+            padding: 50px;
+
+        }
+
+        .card {
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .card-body {
+            width: 309px;
+            margin-bottom: 50px;
+            position: relative;
+            float: left;
+        }
+
+        .card-title {
+            font-size: 30px;
+        }
+
+        .card-text {
+            font-size: 20px;
+            padding: 10px;
+            padding-bottom: 140px;
+            margin-right: 22px;
+        }
+
+        .form-inline{
+               margin: auto;
+               display: block;
+        }
+        .star-btn {
+            position: absolute;
+            bottom: -10%;
+            right: 35%;
+        }
+
+        .delete-btn {
+            position: absolute;
+            bottom: -10%;
+            right: 15%;
+        }
+
+        .lead {
+
+            padding-left:120px;
+            display: block;
+        }
+
+        .review-box {
+
+    display: grid;
+
+    grid-template-columns: 307px 307px 307px;
+
+    grid-template-rows: 400px 400px 400px;
+
+}
+
+        .form-inline{
+             display: grid;
+
+    grid-template-columns: 300px;
+    grid-template-rows: 90px  90px;
+        }
+
+
+#btn-post-box{
+    width: 207px;
+
+}
+.green_button{
+    padding-left: 49px;
+}
+
+#title{
+    width: 69%;
+}
+#bookReview{
+   width: 69%;
+}
+
+
+.voca_text{
+    padding-right: 5px;
+}
+
+
+
+    </style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<div class="wrap">
+    <div class="jumbotron">
+        <h1 class="display-4">ENGLISH <br> 영어 단어장</h1>
+        <p class="lead">TOEIC 단어공부, TOEIC 실전 영단어로 시작해보세요 </p>
+        <hr class="my-4">
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline">
+             <div class="form-group">
+                 <div class="voca_text">
+                    <label for="exampleFormControlInput1">VOCA</label>
+                 </div>
+                <input type="email" class="form-control" id="title" >
+              </div>
+                             <div class="form-group">
+                     <div class="menu_memo">
+                     <label for="exampleFormControlTextarea1">MEMO</label>
+                     </div>
+                <textarea class="form-control" id="bookReview" rows="3"></textarea>
+              </div>
+                <div class="green_button">
+                    <button style="background-color: green" onclick="makeReview()" id="btn-post-box" type="button" class="btn btn-primary">단어 등록하기
+                    </button>
+                </div>
+
+
+            </form>
+        </nav>
+
+    </div>
+
+
+                         <center>snapdragon 660 Test Video</center>
+<br>
+<div onclick="iframe"><iframe width="900" height="500"
+                            src="https://small.dic.daum.net/index.do" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+
+
+
+
+
+    <div id="post-box" class="form-post" style="display:none">
+        <div>
+            <div class="form-group">
+                <label for="post-url">영어 단어</label>
+                <input id="post-url" class="form-control" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="post-comment">단어 뜻</label>
+                <textarea id="post-comment" class="form-control" rows="2"></textarea>
+            </div>
+
+
+                   <button style="background-color: green" type="button" class="btn btn-primary" onclick="postArticle()">등록
+                    </button>
+
+
+        </div>
+    </div>
+    <div id="reviews-box" class="review-box">
+
+
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+</body>
+</html>
